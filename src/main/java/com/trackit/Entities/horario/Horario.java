@@ -34,14 +34,4 @@ public class Horario {
     @OneToMany(mappedBy = "horario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Employee> empleados;
 
-    public Object getHoraInicio() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getHoraInicio'");
-    }
-
-    public void setHoraInicio(Object horaInicio) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setHoraInicio'");
-    }
-
 }

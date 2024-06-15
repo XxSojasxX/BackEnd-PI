@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
-@RequestMapping("/trackit/horarios")
+@RequestMapping("/admin/trackit/horarios")
 public class HorarioController {
 
     @Autowired
@@ -46,14 +46,13 @@ public class HorarioController {
     //Update
     @PutMapping("/update/{id}/")
     public ResponseEntity<Horario> horarioUpdate(@PathVariable Long id, @RequestBody Horario updatedHorario) {
-        Horario existingHorario = horarioService.horarioFindById(id);
-        if (existingHorario != null) {
-            existingHorario.setNombreHorario(updatedHorario.getNombreHorario());
-            existingHorario.setHoraInicio(updatedHorario.getHoraInicio());
-            existingHorario.setHoraEntrada(updatedHorario.getHoraEntrada());
-            // Actualizar otros campos según sea necesario
+        Horario actualizarHorario = horarioService.horarioFindById(id);
+        if (actualizarHorario != null) {
+            actualizarHorario.setNombreHorario(updatedHorario.getNombreHorario());
+            actualizarHorario.setHoraEntrada(updatedHorario.getHoraEntrada());
+            actualizarHorario.setHoraSalida(updatedHorario.getHoraSalida());
 
-            return ResponseEntity.ok(horarioService.horarioSave(existingHorario));
+            return ResponseEntity.ok(horarioService.horarioSave(actualizarHorario));
         } else {
             throw new EntityNotFoundException("Horario with id " + id + " not found");
         }

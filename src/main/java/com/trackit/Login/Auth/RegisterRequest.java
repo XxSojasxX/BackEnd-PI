@@ -1,5 +1,7 @@
 package com.trackit.Login.Auth;
 
+import com.trackit.Login.User.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +15,7 @@ public class RegisterRequest {
     String userName;
     String password;
     String firstName;
-    String lastName; 
+    String lastName;
+    Role role; 
     
 }
