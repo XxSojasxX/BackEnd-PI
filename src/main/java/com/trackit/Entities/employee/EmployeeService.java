@@ -50,6 +50,29 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
+    // Update
+    public Employee employeeUpdate(Long id, Employee updatedEmployee) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users currentUser = (Users) auth.getPrincipal();
+
+        Employee existingEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+
+        if (canModifyEmployee(existingEmployee, currentUser)) {
+            existingEmployee.setCedula(updatedEmployee.getCedula());
+            existingEmployee.setNombreEmpleado(updatedEmployee.getNombreEmpleado());
+            existingEmployee.setApellidoEmpleado(updatedEmployee.getApellidoEmpleado());
+            existingEmployee.setCorreoEmpleado(updatedEmployee.getCorreoEmpleado());
+            existingEmployee.setArea(updatedEmployee.getArea());
+            existingEmployee.setHorario(updatedEmployee.getHorario());
+
+            return employeeRepository.save(existingEmployee);
+        } else {
+            System.err.println("SecurityException: You do not have permission to update this employee");
+            throw new SecurityException("You do not have permission to update this employee");
+        }
+    }
+
     // Delete
     public void employeeDeleteById(Long id) {
         Employee employee = employeeRepository.findById(id)

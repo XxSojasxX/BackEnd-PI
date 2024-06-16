@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.trackit.Login.JWT.JwtService;
-import com.trackit.Login.User.Role;
 import com.trackit.Login.User.UserRepository;
 import com.trackit.Login.User.Users;
 

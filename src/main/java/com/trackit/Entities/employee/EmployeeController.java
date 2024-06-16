@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
-@RequestMapping("/trackit/employees")
+@RequestMapping("/trackit/rh/employees")
 public class EmployeeController {
     
     @Autowired

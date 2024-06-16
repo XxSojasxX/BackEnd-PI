@@ -16,24 +16,24 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class HorarioService {
-    
+
     @Autowired
     private HorarioRepository horarioRepository;
 
-    // Insertar un horario
+    // Insert
     public Horario horarioSave(Horario entity) {
         Users currentUser = getCurrentUser();
         entity.setCreatedBy(currentUser);
         return horarioRepository.save(entity);
     }
 
-    // Encontrar un horario por su ID
+    // Select
     public Horario horarioFindById(Long id) {
         Users currentUser = getCurrentUser();
-        
+
         Horario horario = horarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Horario no encontrado"));
-        
+
         if (canAccessHorario(horario, currentUser)) {
             return horario;
         } else {
@@ -42,17 +42,37 @@ public class HorarioService {
         }
     }
 
-    // Obtener todos los horarios
+    // Select All
     public List<Horario> horarioFindAll() {
         Users currentUser = getCurrentUser();
-        
+
         Iterable<Horario> iterable = horarioRepository.findAll();
         return StreamSupport.stream(iterable.spliterator(), false)
                 .filter(horario -> canAccessHorario(horario, currentUser))
                 .collect(Collectors.toList());
     }
 
-    // Eliminar un horario por su ID
+    // Update
+    public Horario horarioUpdate(Long id, Horario updatedHorario) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users currentUser = (Users) auth.getPrincipal();
+
+        Horario existingHorario = horarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Horario not found"));
+
+        if (canModifyHorario(existingHorario, currentUser)) {
+            existingHorario.setNombreHorario(updatedHorario.getNombreHorario());
+            existingHorario.setHoraEntrada(updatedHorario.getHoraEntrada());
+            existingHorario.setHoraSalida(updatedHorario.getHoraSalida());
+
+            return horarioRepository.save(existingHorario);
+        } else {
+            System.err.println("SecurityException: You do not have permission to update this horario");
+            throw new SecurityException("You do not have permission to update this horario");
+        }
+    }
+
+    // Delete
     public void horarioDeleteById(Long id) {
         Horario horario = horarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Horario no encontrado"));

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import com.trackit.Entities.employee.Employee;
 import com.trackit.Entities.employee.EmployeeRepository;
 import com.trackit.Login.User.Role;
-import com.trackit.Login.User.UserRepository;
 import com.trackit.Login.User.Users;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -30,9 +29,6 @@ public class AssetService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     // Insert
     public Asset assetSave(Asset entity) {
@@ -76,7 +72,6 @@ public class AssetService {
             existingAsset.setVidaUtil(updatedAsset.getVidaUtil());
             existingAsset.setCategory(updatedAsset.getCategory());
             existingAsset.setEmployee(updatedAsset.getEmployee());
-            // No modificar el campo createdBy
     
             return assetRepository.save(existingAsset);
         } else {

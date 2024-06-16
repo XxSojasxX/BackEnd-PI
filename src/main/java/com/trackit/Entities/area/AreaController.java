@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
-@RequestMapping("/trackit/areas")
+@RequestMapping("/trackit/rh/areas")
 public class AreaController {
     
     @Autowired

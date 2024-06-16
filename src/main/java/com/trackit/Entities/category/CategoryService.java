@@ -50,6 +50,25 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
+    // Update
+     public Category categoryUpdate(Long id, Category updatedCategory) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users currentUser = (Users) auth.getPrincipal();
+
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        if (canModifyCategory(existingCategory, currentUser)) {
+            existingCategory.setNombreCategoria(updatedCategory.getNombreCategoria());
+            existingCategory.setDescripcionCategoria(updatedCategory.getDescripcionCategoria());
+
+            return categoryRepository.save(existingCategory);
+        } else {
+            System.err.println("SecurityException: No tienes permiso para actualizar esta categoría");
+            throw new SecurityException("No tienes permiso para actualizar esta categoría");
+        }
+    }
+
     // Delete
     public void categoryDeleteById(Long id) {
         Category category = categoryRepository.findById(id)

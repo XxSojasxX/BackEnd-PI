@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
-@RequestMapping("/trackit/categories")
+@RequestMapping("/trackit/bodega/categories")
 public class CategoryController {
     
     @Autowired

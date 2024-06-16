@@ -16,24 +16,24 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class AreaService {
-    
+
     @Autowired
     private AreaRepository areaRepository;
 
-    // Insertar un área
+    // Insert
     public Area areaSave(Area entity) {
         Users currentUser = getCurrentUser();
         entity.setCreatedBy(currentUser);
         return areaRepository.save(entity);
     }
 
-    // Encontrar un área por su ID
+    // Select
     public Area areaFindById(Long id) {
         Users currentUser = getCurrentUser();
-        
+
         Area area = areaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Área no encontrada"));
-        
+
         if (canAccessArea(area, currentUser)) {
             return area;
         } else {
@@ -42,17 +42,35 @@ public class AreaService {
         }
     }
 
-    // Obtener todas las áreas
+    // Select All
     public List<Area> areaFindAll() {
         Users currentUser = getCurrentUser();
-        
+
         Iterable<Area> iterable = areaRepository.findAll();
         return StreamSupport.stream(iterable.spliterator(), false)
                 .filter(area -> canAccessArea(area, currentUser))
                 .collect(Collectors.toList());
     }
 
-    // Eliminar un área por su ID
+    // Update
+    public Area areaUpdate(Long id, Area updatedArea) {
+        Users currentUser = getCurrentUser();
+
+        Area existingArea = areaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Área no encontrada"));
+
+        if (canModifyArea(existingArea, currentUser)) {
+            existingArea.setNombreArea(updatedArea.getNombreArea());
+            existingArea.setDescripcionArea(updatedArea.getDescripcionArea());
+
+            return areaRepository.save(existingArea);
+        } else {
+            System.err.println("SecurityException: No tienes permiso para actualizar esta área");
+            throw new SecurityException("No tienes permiso para actualizar esta área");
+        }
+    }
+
+    // Delete
     public void areaDeleteById(Long id) {
         Area area = areaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Área no encontrada"));
