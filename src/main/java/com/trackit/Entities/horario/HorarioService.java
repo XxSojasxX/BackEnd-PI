@@ -82,4 +82,4 @@ public class HorarioService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return (Users) auth.getPrincipal();
     }
-}d
+}
