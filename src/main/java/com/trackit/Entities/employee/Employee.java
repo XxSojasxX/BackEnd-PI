@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.trackit.Entities.area.Area;
 import com.trackit.Entities.horario.Horario;
+import com.trackit.Login.User.Users;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,4 +49,8 @@ public class Employee {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "horario_id")
     private Horario horario;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false, updatable = false)
+    private Users createdBy; 
 }

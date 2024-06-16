@@ -4,6 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.trackit.Entities.category.Category;
 import com.trackit.Entities.employee.Employee;
+import com.trackit.Login.User.Users;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,4 +47,8 @@ public class Asset {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false) // La categoría es obligatoria
     private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false, updatable = false)
+    private Users createdBy; 
 }

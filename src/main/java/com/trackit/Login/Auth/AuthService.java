@@ -40,7 +40,7 @@ public class AuthService {
             .password(passwordEncoder.encode(request.getPassword())) // Encriptar la contraseña
             .firstName(request.getFirstName())
             .lastName(request.getLastName())
-            .role(request.getRole()) // Usa el rol del request
+            .role(request.getRole()) 
             .build();  
 
         userRepository.save(user);

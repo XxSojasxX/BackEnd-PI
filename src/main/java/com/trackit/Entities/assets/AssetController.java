@@ -17,7 +17,7 @@ import jakarta.persistence.EntityNotFoundException;
 
 
 @RestController
-@RequestMapping("/bodega/assets")
+@RequestMapping("/trackit/bodega/assets")
 public class AssetController {
     
     @Autowired
