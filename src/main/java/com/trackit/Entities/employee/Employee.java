@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.trackit.Entities.area.Area;
@@ -64,5 +65,6 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     @JsonManagedReference("employee-asset")
+    @JsonIgnoreProperties({"employee"}) 
     private List<Asset> assets;
 }

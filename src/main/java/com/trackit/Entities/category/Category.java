@@ -6,7 +6,8 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.trackit.Entities.assets.Asset;
 import com.trackit.Login.User.Users;
 
@@ -40,7 +41,7 @@ public class Category {
     private LocalDateTime fechaCreacion;
 
     @OneToMany(mappedBy = "category")
-    @JsonManagedReference("category-asset")
+    @JsonIgnore
     private List<Asset> assets;
 
     @ManyToOne(fetch = FetchType.LAZY)
