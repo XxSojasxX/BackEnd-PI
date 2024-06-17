@@ -3,10 +3,8 @@ package com.trackit.Entities.assets;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 import com.trackit.Entities.category.Category;
 import com.trackit.Entities.employee.Employee;
@@ -21,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,7 +29,7 @@ public class Asset {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(nullable = false)
     private String codigoActivo;
 
@@ -53,7 +52,7 @@ public class Asset {
     private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false) // La categoría es obligatoria
+    @JoinColumn(name = "category_id", nullable = false)
     @JsonIdentityReference(alwaysAsId = true)
     private Category category;
 
@@ -61,18 +60,18 @@ public class Asset {
     @JoinColumn(name = "created_by", nullable = false, updatable = false)
     @JsonBackReference("user-asset")
     private Users createdBy;
-    
-    // Agrega este método si no quieres que se ignore la propiedad "category" al serializar
-    // cuando se devuelve un Asset individualmente.
+
+    // Getter y Setter para todos los campos
+
+    // Método para evitar la serialización de "category" en su forma completa
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public Category getCategory() {
         return category;
     }
 
-    // cuando se devuelve un Asset individualmente.
+    // Método para evitar la serialización de "employee" en su forma completa
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public Employee getEmployee() {
         return employee;
     }
-
 }
