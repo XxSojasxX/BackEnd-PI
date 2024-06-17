@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.trackit.Entities.employee.Employee;
 import com.trackit.Login.User.Users;
 
@@ -38,6 +39,7 @@ public class Horario {
 
     @OneToMany(mappedBy = "horario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("horario-employee")
+    @JsonIgnore
     private List<Employee> empleados;
 
     @ManyToOne(fetch = FetchType.LAZY)

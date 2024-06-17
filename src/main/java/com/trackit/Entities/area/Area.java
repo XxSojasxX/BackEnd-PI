@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.trackit.Entities.employee.Employee;
 import com.trackit.Login.User.Users;
 
@@ -41,6 +42,7 @@ public class Area {
 
     @OneToMany(mappedBy = "area")
     @JsonManagedReference("area-employee")
+    @JsonIgnore
     private List<Employee> employees;
 
     @ManyToOne(fetch = FetchType.LAZY)
