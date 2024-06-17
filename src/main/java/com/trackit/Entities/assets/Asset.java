@@ -2,6 +2,8 @@ package com.trackit.Entities.assets;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.trackit.Entities.category.Category;
 import com.trackit.Entities.employee.Employee;
 import com.trackit.Login.User.Users;
@@ -42,13 +44,16 @@ public class Asset {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = true)
+    @JsonBackReference("employee-asset")
     private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false) // La categoría es obligatoria
+    @JsonBackReference("category-asset")
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false, updatable = false)
-    private Users createdBy; 
+    @JsonBackReference("user-asset")
+    private Users createdBy;
 }

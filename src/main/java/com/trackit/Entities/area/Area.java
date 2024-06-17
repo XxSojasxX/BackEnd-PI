@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.trackit.Entities.employee.Employee;
 import com.trackit.Login.User.Users;
 
@@ -38,10 +40,11 @@ public class Area {
     private LocalDateTime fechaCreacion;
 
     @OneToMany(mappedBy = "area")
+    @JsonManagedReference("area-employee")
     private List<Employee> employees;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false, updatable = false)
+    @JsonBackReference("user-area")
     private Users createdBy; 
-
 }
