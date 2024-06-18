@@ -2,6 +2,9 @@ package com.trackit.Entities.horario;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.trackit.Entities.employee.Employee;
 import com.trackit.Login.User.Users;
 
@@ -35,10 +38,12 @@ public class Horario {
     private String horaSalida;
 
     @OneToMany(mappedBy = "horario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("horario-employee")
+    @JsonIgnore
     private List<Employee> empleados;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false, updatable = false)
+    @JsonBackReference("user-horario")
     private Users createdBy; 
-
 }

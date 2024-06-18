@@ -7,14 +7,23 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.trackit.Entities.assets.Asset;
+import com.trackit.Entities.category.Category;
+import com.trackit.Entities.area.Area;
+import com.trackit.Entities.employee.Employee;
+import com.trackit.Entities.horario.Horario;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -49,6 +58,26 @@ public class Users implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+    @JsonManagedReference("user-asset")
+    private List<Asset> createdAssets;
+
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+    @JsonManagedReference("user-category")
+    private List<Category> createdCategories;
+
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+    @JsonManagedReference("user-area")
+    private List<Area> createdAreas;
+
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+    @JsonManagedReference("user-employee")
+    private List<Employee> createdEmployees;
+
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+    @JsonManagedReference("user-horario")
+    private List<Horario> createdHorarios;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
