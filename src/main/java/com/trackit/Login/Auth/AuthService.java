@@ -33,17 +33,25 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
             String token = jwtService.getToken(user);
             return AuthResponse.builder()
+                .success(true)
+                .message("Inicio de sesión correcto")
                 .token(token)
                 .build();
         } catch (BadCredentialsException e) {
             log.error("Error de autenticación: Credenciales incorrectas para el usuario {}", request.getUserName());
-            throw new RuntimeException("Credenciales incorrectas.");
+            return AuthResponse.builder()
+                .success(false)
+                .message("Credenciales incorrectas.")
+                .build();
         } catch (Exception e) {
             log.error("Error de autenticación: {}", e.getMessage());
-            throw new RuntimeException("Error de autenticación.");
+            return AuthResponse.builder()
+                .success(false)
+                .message("Error de autenticación.")
+                .build();
         }
     }
-
+    
     public AuthResponse register(RegisterRequest request) {
         try {
             if (userRepository.findByUserName(request.getUserName()).isPresent()) {
@@ -59,14 +67,22 @@ public class AuthService {
             userRepository.save(user);
             String token = jwtService.getToken(user);
             return AuthResponse.builder()
+                .success(true)
+                .message("Registro exitoso")
                 .token(token)
                 .build();
         } catch (RuntimeException e) {
             log.error("Error al registrar el usuario: {}", e.getMessage());
-            throw new RuntimeException("Error al registrar el usuario: " + e.getMessage());
+            return AuthResponse.builder()
+                .success(false)
+                .message("Error al registrar el usuario: " + e.getMessage())
+                .build();
         } catch (Exception e) {
             log.error("Error inesperado al registrar el usuario: {}", e.getMessage());
-            throw new RuntimeException("Error inesperado al registrar el usuario.");
+            return AuthResponse.builder()
+                .success(false)
+                .message("Error inesperado al registrar el usuario.")
+                .build();
         }
     }
 }
