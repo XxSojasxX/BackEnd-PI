@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/trackit/rh/horarios")
+@Tag(name = "Controlador de Horarios")
 public class HorarioController {
 
     @Autowired
@@ -24,6 +27,7 @@ public class HorarioController {
 
     //Create
     @PostMapping
+    @Operation(summary = "Crear un Horario")
     public Horario horarioSave (@RequestBody Horario entity)
     {
         return horarioService.horarioSave(entity);
@@ -31,6 +35,7 @@ public class HorarioController {
 
     //Select
     @GetMapping("/{id}/")
+    @Operation(summary =  "Buscar un Horario por ID")
     public Horario horarioFindById(@PathVariable Long id)
     {
         return horarioService.horarioFindById(id);
@@ -38,6 +43,7 @@ public class HorarioController {
 
     //Select All
     @GetMapping
+    @Operation(summary = "Buscar todos los Horarios")
     public List<Horario> horarioFindAll()
     {
         return horarioService.horarioFindAll();
@@ -45,6 +51,7 @@ public class HorarioController {
 
     //Update
     @PutMapping("/update/{id}/")
+    @Operation(summary = "Actualizar un Horario")
     public ResponseEntity<Horario> horarioUpdate(@PathVariable Long id, @RequestBody Horario updatedHorario) {
         Horario actualizarHorario = horarioService.horarioFindById(id);
         if (actualizarHorario != null) {
@@ -59,6 +66,7 @@ public class HorarioController {
     }                              
     
     //Delete
+    @Operation(summary = "Eliminar un Horario")
     @DeleteMapping("/{id}/")
         public void horarioDelete(@PathVariable Long id)
         {

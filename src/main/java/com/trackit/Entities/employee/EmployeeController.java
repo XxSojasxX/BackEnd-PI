@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/trackit/rh/employees")
+@Tag(name = "Controlador de Empleados")
 public class EmployeeController {
     
     @Autowired
@@ -24,6 +27,7 @@ public class EmployeeController {
 
     //Create
     @PostMapping
+    @Operation(summary = "Crea un Empleado")
     public Employee employeeSave (@RequestBody Employee entity)
     {
         return employeeService.employeeSave(entity);
@@ -31,6 +35,7 @@ public class EmployeeController {
 
     //Select
     @GetMapping("/{id}/")
+    @Operation(summary = "Busca un Empleado por id")
     public Employee employeeFindById(@PathVariable Long id)
     {
         return employeeService.employeeFindById(id);
@@ -38,12 +43,14 @@ public class EmployeeController {
 
     //Select All
     @GetMapping
+    @Operation(summary = "Busca todos los empleados")
     public List<Employee> employeeFindAll(){
         return employeeService.employeeFindAll();
     }
 
     //Update
     @PutMapping("/update/{id}/")
+    @Operation(summary = "Actualiza un Empleado")
     public ResponseEntity<Employee> employeeUpdate(@PathVariable Long id, @RequestBody Employee updatedEmployee) {
         Employee existingEmployee = employeeService.employeeFindById(id);
         if (existingEmployee != null) {
@@ -59,6 +66,7 @@ public class EmployeeController {
 
     //DeleteMapping
     @DeleteMapping("/{id}/")
+    @Operation(summary = "Busca un Area por id")
     public void employeeDelete(@PathVariable Long id){
         employeeService.employeeDeleteById(id);
     }

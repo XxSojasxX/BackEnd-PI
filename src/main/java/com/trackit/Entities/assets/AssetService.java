@@ -1,12 +1,10 @@
 package com.trackit.Entities.assets;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
-import java.util.stream.Collectors;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import java.time.LocalDateTime;
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,7 +17,6 @@ import com.trackit.Login.User.Role;
 import com.trackit.Login.User.Users;
 
 import jakarta.persistence.EntityNotFoundException;
-
 
 @Service
 public class AssetService {
@@ -84,27 +81,34 @@ public class AssetService {
     public void assetDeleteById(Long id) {
         Users currentUser = getCurrentUser();
         Asset existingAsset = assetRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Activo No Encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Activo no encontrado"));
 
         if (canModifyAsset(existingAsset, currentUser)) {
             assetRepository.deleteById(id);
         } else {
-            System.err.println("SecurityException: No tienes permiso para borrar este activo");
-            throw new SecurityException("No tienes permiso para borrar este activo");
+            System.err.println("SecurityException: No tienes permiso para eliminar este activo");
+            throw new SecurityException("No tienes permiso para eliminar este activo");
         }
     }
 
-    //Asignar activo a empleado
+    // Assign asset to employee
     public void asignarActivoAEmpleado(Long assetId, Long employeeId) {
+        Users currentUser = getCurrentUser();
+        
         Optional<Asset> optionalAsset = assetRepository.findById(assetId);
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
 
         if (optionalAsset.isPresent() && optionalEmployee.isPresent()) {
             Asset asset = optionalAsset.get();
             Employee employee = optionalEmployee.get();
-            asset.setEmployee(employee);
-            asset.setFechaAsignacion(LocalDateTime.now());
-            assetRepository.save(asset);
+
+            if (canModifyAsset(asset, currentUser)) {
+                asset.setEmployee(employee);
+                asset.setFechaAsignacion(LocalDateTime.now());
+                assetRepository.save(asset);
+            } else {
+                throw new SecurityException("No tienes permiso para asignar este activo a un empleado");
+            }
         } else {
             throw new EntityNotFoundException("Activo o Empleado no encontrado");
         }
@@ -112,17 +116,20 @@ public class AssetService {
 
     // Método auxiliar para verificar si el usuario puede acceder al activo
     private boolean canAccessAsset(Asset asset, Users currentUser) {
-        return currentUser.getRole() == Role.ADMIN || asset.getCreatedBy().equals(currentUser);
+        return currentUser.getRole() == Role.ADMIN || asset.getCreatedBy().getId().equals(currentUser.getId());
     }
 
     // Método auxiliar para verificar si el usuario puede modificar el activo
     private boolean canModifyAsset(Asset asset, Users currentUser) {
-        return currentUser.getRole() == Role.ADMIN || asset.getCreatedBy().equals(currentUser);
+        return currentUser.getRole() == Role.ADMIN || asset.getCreatedBy().getId().equals(currentUser.getId());
     }
 
     // Obtener el usuario actualmente autenticado
     private Users getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new SecurityException("No se encontró un usuario autenticado");
+        }
         return (Users) auth.getPrincipal();
     }
 }

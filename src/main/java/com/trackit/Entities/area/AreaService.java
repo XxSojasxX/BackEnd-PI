@@ -87,17 +87,22 @@ public class AreaService {
 
     // Método auxiliar para verificar si el usuario puede acceder al área
     private boolean canAccessArea(Area area, Users currentUser) {
-        return currentUser.getRole() == Role.ADMIN || area.getCreatedBy().equals(currentUser);
+        System.out.println("Comparando User ID: " + currentUser.getId() + " con Area Created By ID: " + area.getCreatedBy().getId());
+        return currentUser.getRole() == Role.ADMIN || area.getCreatedBy().getId().equals(currentUser.getId());
     }
 
     // Método auxiliar para verificar si el usuario puede modificar el área
     private boolean canModifyArea(Area area, Users currentUser) {
-        return currentUser.getRole() == Role.ADMIN || area.getCreatedBy().equals(currentUser);
+        System.out.println("Comparando User ID: " + currentUser.getId() + " con Area Created By ID: " + area.getCreatedBy().getId());
+        return currentUser.getRole() == Role.ADMIN || area.getCreatedBy().getId().equals(currentUser.getId());
     }
 
     // Obtener el usuario actualmente autenticado
     private Users getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new SecurityException("No se encontró un usuario autenticado");
+        }
         return (Users) auth.getPrincipal();
     }
 }

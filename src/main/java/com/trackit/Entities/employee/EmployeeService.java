@@ -1,6 +1,7 @@
 package com.trackit.Entities.employee;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -36,8 +37,8 @@ public class EmployeeService {
         if (canAccessEmployee(employee, currentUser)) {
             return employee;
         } else {
-            System.err.println("SecurityException: No tienes permiso para ver este empleado");
-            throw new SecurityException("No tienes permiso para ver este empleado");
+            System.err.println("SecurityException: You do not have permission to view this employee");
+            throw new SecurityException("You do not have permission to view this employee");
         }
     }
 
@@ -52,9 +53,7 @@ public class EmployeeService {
 
     // Update
     public Employee employeeUpdate(Long id, Employee updatedEmployee) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users currentUser = (Users) auth.getPrincipal();
-
+        Users currentUser = getCurrentUser();
         Employee existingEmployee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
 
@@ -83,24 +82,27 @@ public class EmployeeService {
         if (canModifyEmployee(employee, currentUser)) {
             employeeRepository.deleteById(id);
         } else {
-            System.err.println("SecurityException: No tienes permiso para eliminar este empleado");
-            throw new SecurityException("No tienes permiso para eliminar este empleado");
+            System.err.println("SecurityException: You do not have permission to delete this employee");
+            throw new SecurityException("You do not have permission to delete this employee");
         }
     }
 
     // Método auxiliar para verificar si el usuario puede acceder al empleado
     private boolean canAccessEmployee(Employee employee, Users currentUser) {
-        return currentUser.getRole() == Role.ADMIN || employee.getCreatedBy().equals(currentUser);
+        return currentUser.getRole() == Role.ADMIN || employee.getCreatedBy().getId().equals(currentUser.getId());
     }
 
     // Método auxiliar para verificar si el usuario puede modificar el empleado
     private boolean canModifyEmployee(Employee employee, Users currentUser) {
-        return currentUser.getRole() == Role.ADMIN || employee.getCreatedBy().equals(currentUser);
+        return currentUser.getRole() == Role.ADMIN || employee.getCreatedBy().getId().equals(currentUser.getId());
     }
 
     // Obtener el usuario actualmente autenticado
     private Users getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new SecurityException("No authenticated user found");
+        }
         return (Users) auth.getPrincipal();
     }
 }

@@ -54,8 +54,7 @@ public class HorarioService {
 
     // Update
     public Horario horarioUpdate(Long id, Horario updatedHorario) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users currentUser = (Users) auth.getPrincipal();
+        Users currentUser = getCurrentUser();
 
         Horario existingHorario = horarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Horario not found"));
@@ -89,17 +88,22 @@ public class HorarioService {
 
     // Método auxiliar para verificar si el usuario puede acceder al horario
     private boolean canAccessHorario(Horario horario, Users currentUser) {
-        return currentUser.getRole() == Role.ADMIN || horario.getCreatedBy().equals(currentUser);
+        System.out.println("Comparing User ID: " + currentUser.getId() + " with Horario Created By ID: " + horario.getCreatedBy().getId());
+        return currentUser.getRole() == Role.ADMIN || horario.getCreatedBy().getId().equals(currentUser.getId());
     }
 
     // Método auxiliar para verificar si el usuario puede modificar el horario
     private boolean canModifyHorario(Horario horario, Users currentUser) {
-        return currentUser.getRole() == Role.ADMIN || horario.getCreatedBy().equals(currentUser);
+        System.out.println("Comparing User ID: " + currentUser.getId() + " with Horario Created By ID: " + horario.getCreatedBy().getId());
+        return currentUser.getRole() == Role.ADMIN || horario.getCreatedBy().getId().equals(currentUser.getId());
     }
 
     // Obtener el usuario actualmente autenticado
     private Users getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new SecurityException("No authenticated user found");
+        }
         return (Users) auth.getPrincipal();
     }
 }
