@@ -2,6 +2,4 @@ FROM openjdk:17-slim
 
 COPY trackit-0.0.1-SNAPSHOT.jar /trackit.jar
 
-EXPOSE 9081
-
 CMD ["java", "-jar", "/trackit.jar"]
