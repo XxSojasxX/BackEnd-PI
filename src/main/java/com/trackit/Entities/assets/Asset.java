@@ -61,7 +61,6 @@ public class Asset {
     @JsonBackReference("user-asset")
     private Users createdBy;
 
-    // Getter y Setter para todos los campos
 
     // Método para evitar la serialización de "category" en su forma completa
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
