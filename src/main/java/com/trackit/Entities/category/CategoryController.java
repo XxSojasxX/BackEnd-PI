@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/trackit/bodega/categories")
+@Tag(name = "Controlador de Categorias")
 public class CategoryController {
     
     @Autowired
@@ -24,6 +27,7 @@ public class CategoryController {
 
     //Create
     @PostMapping
+    @Operation(summary = "Crear una Categoria")
     public Category categorySave(@RequestBody Category entity)
     {
         return categoryService.categorySave(entity);
@@ -31,6 +35,7 @@ public class CategoryController {
 
     //Select
     @GetMapping("/{id}/")
+    @Operation(summary = "Busca una Categoria por id")
     public Category categoryFindById(@PathVariable Long id)
     {
         return categoryService.categoryFindById(id);
@@ -38,6 +43,7 @@ public class CategoryController {
 
     //SelectAll
     @GetMapping
+    @Operation(summary = "Busca todas las Categorias")
     public List<Category> categoryFindAll()
     {
         return categoryService.categoryFindAll();
@@ -45,6 +51,7 @@ public class CategoryController {
 
     //Update
     @PutMapping("/update/{id}/")
+    @Operation(summary = "Actualizar una Categoria")
     public ResponseEntity<Category> categoryUpdate(@PathVariable Long id, @RequestBody Category updatedCategory) {
         Category existingCategory = categoryService.categoryFindById(id);
         if (existingCategory != null) {
@@ -58,9 +65,9 @@ public class CategoryController {
         }
     }
     
-
     //Delete
     @DeleteMapping("/{id}/")
+    @Operation(summary = "Eliminar una Categoria")
     public void categoryDelete(@PathVariable Long id)
     {
         categoryService.categoryDeleteById(id);

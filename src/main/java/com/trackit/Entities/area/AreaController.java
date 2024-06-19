@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/trackit/rh/areas")
+@Tag(name = "Controlador de Area")
 public class AreaController {
     
     @Autowired
@@ -24,6 +27,7 @@ public class AreaController {
 
     //Create
     @PostMapping
+    @Operation(summary = "Guarda un Area")
     public Area areaSave (@RequestBody Area entity)
     {
         return areaService.areaSave(entity);
@@ -31,14 +35,15 @@ public class AreaController {
 
     //Select
     @GetMapping("/{id}/")
+    @Operation(summary = "Busca un Area por id")
     public Area areaFindById(@PathVariable Long id)
     {
         return areaService.areaFindById(id);
     }
 
     //Select All
-
     @GetMapping
+    @Operation(summary = "Busca todas las Areas")
     public List<Area> areaFindAll()
     {
         return areaService.areaFindAll();
@@ -46,6 +51,7 @@ public class AreaController {
 
     //Update
     @PutMapping("/update/{id}/")
+    @Operation(summary = "Actualizar un Area")
     public ResponseEntity<Area> areaUpdate(@PathVariable Long id, @RequestBody Area updatedArea) {
         Area existingArea = areaService.areaFindById(id);
         if (existingArea != null) {
@@ -61,6 +67,7 @@ public class AreaController {
 
     //Delete
     @DeleteMapping("/{id}/")
+    @Operation(summary = "Elminar un Area")
     public void areaDelete(@PathVariable Long id)
     {
         areaService.areaDeleteById(id);

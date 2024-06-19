@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    image: trackit:1
+    enviroment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - target: 8080
+        published: 9081
+        protocol: tcp
+        mode: host
+    networks:
+      - desarrollo_net
+  dbclases:
+    image: mysql:8.4.0
+    enviroment:
+      - TZ=America/Guayaquil
+      - MYSQL_DATABASE=trackit
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=3132003Aj933sebas@
+      - MYSQLDATA=/var/lib/mysql/data/mysqldata
+    volumes:
+      - mysql_data:/var/lib/mysql/data/mysqldata
+    networks:
+      - desarrollo_net
+
+
+volumes:
+  mysqldata:
+    external: true
+
+networks:
+  desarrollo_net:
+    external: true
+
+      

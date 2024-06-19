@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 
 
 @RestController
 @RequestMapping("/trackit/bodega/assets")
+@Tag(name = "Controlador de activos")
 public class AssetController {
     
     @Autowired
@@ -25,6 +28,7 @@ public class AssetController {
 
     //Create
     @PostMapping
+    @Operation(summary = "Crear un Activo")
     public Asset assetSave(@RequestBody Asset entity)
     {
         return assetService.assetSave(entity);
@@ -32,6 +36,7 @@ public class AssetController {
 
     //Select
     @GetMapping("/{id}/")
+    @Operation(summary = "Busca un Activos por id")
     public Asset assetFindById(@PathVariable Long id)
     {
         return assetService.assetFindById(id);
@@ -39,6 +44,7 @@ public class AssetController {
 
     //Select All
     @GetMapping
+    @Operation(summary = "Buscar todos los Activos")
     public List<Asset> assetFindAll()
     {
         return assetService.assetFindAll();
@@ -46,6 +52,7 @@ public class AssetController {
 
     //Update
     @PutMapping("/update/{id}/")
+    @Operation(summary = "Actualizar un Activo")
     public Asset assetUpdate(@PathVariable Long id, @RequestBody Asset updatedAsset) {
         Asset existingAsset = assetService.assetFindById(id);
         if (existingAsset != null) {
@@ -63,6 +70,7 @@ public class AssetController {
 
     //Delete
     @DeleteMapping("/{id}/")
+    @Operation(summary = "Eliminar un Activo")
     public void assetDelete(@PathVariable Long id)
     {
         assetService.assetDeleteById(id);
@@ -70,6 +78,7 @@ public class AssetController {
 
     //Asignar Activo a Empleado
     @PutMapping(("/{assetId}/assign/{employeeId}"))
+    @Operation(summary = "Asignar un Activo a un Empleado")
     public ResponseEntity<Void> asignarActivoAEmpleado(@PathVariable Long assetId, @PathVariable Long employeeId){
         try{
             assetService.asignarActivoAEmpleado(assetId, employeeId);
