@@ -33,6 +33,7 @@ public class SecurityConfig {
               authRequest
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("trackit/users").hasAnyAuthority(Role.ADMIN.name())
                 //.requestMatchers("/trackit/**").permitAll()
                 .requestMatchers("/trackit/admin/**").hasAuthority(Role.ADMIN.name())
                 .requestMatchers("/trackit/bodega/**").hasAnyAuthority(Role.BODEGA.name(), Role.ADMIN.name())

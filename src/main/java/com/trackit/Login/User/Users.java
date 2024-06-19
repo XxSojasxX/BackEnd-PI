@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.trackit.Entities.assets.Asset;
 import com.trackit.Entities.category.Category;
@@ -61,24 +62,30 @@ public class Users implements UserDetails {
 
     @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
     @JsonManagedReference("user-asset")
+    @JsonIgnore
     private List<Asset> createdAssets;
 
     @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
     @JsonManagedReference("user-category")
+    @JsonIgnore
     private List<Category> createdCategories;
 
     @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
     @JsonManagedReference("user-area")
+    @JsonIgnore
     private List<Area> createdAreas;
 
     @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
     @JsonManagedReference("user-employee")
+    @JsonIgnore
     private List<Employee> createdEmployees;
 
     @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
     @JsonManagedReference("user-horario")
+    @JsonIgnore
     private List<Horario> createdHorarios;
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
