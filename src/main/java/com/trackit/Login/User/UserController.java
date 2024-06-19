@@ -3,6 +3,7 @@ package com.trackit.Login.User;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("trackit/users")
@@ -46,11 +48,22 @@ public class UserController {
     }
 
     //Metodo update
-    @PutMapping("/update")
-    @Operation(summary = "Actualizar un Usuario")
-    public Users update(@RequestBody Users Entity)
-    {
-        return userService.save(Entity);
+    @PutMapping("/update/{id}/")
+    @Operation(summary = "Actualizar un Usuario por ID")
+    public ResponseEntity<Users> updateUserById(@PathVariable Integer id, @RequestBody Users updatedUser) {
+    Users existingUser = userService.findById(id);
+    if (existingUser != null) {
+        existingUser.setFirstName(updatedUser.getFirstName());
+        existingUser.setLastName(updatedUser.getLastName());
+        existingUser.setPassword(updatedUser.getPassword());
+        existingUser.setUserName(updatedUser.getUsername());
+        // Actualizar otros campos según sea necesario
+
+        Users savedUser = userService.save(existingUser);
+        return ResponseEntity.ok(savedUser);
+    } else {
+        throw new EntityNotFoundException("Usuario con id " + id + " no encontrado");
+    }
     }
 
     // Método delete

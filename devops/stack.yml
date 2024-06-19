@@ -18,7 +18,7 @@ services:
       - TZ=America/Guayaquil
       - MYSQL_DATABASE=trackit
       - MYSQL_USER=root
-      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ROOT_PASSWORD=3132003Aj933sebas@
       - MYSQLDATA=/var/lib/mysql/data/mysqldata
     volumes:
       - mysql_data:/var/lib/mysql/data/mysqldata
